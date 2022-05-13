@@ -5,37 +5,41 @@ console.log(`Welcome to Currency Converter!
 1 USD equals  74.36 RUB
 1 USD equals  0.75 GBP`)
 
-console.log(`I can convert USD to these currencies: JPY, EUR, RUB, USD, GBP
-Type the currency you wish to convert: USD`)
+console.log(`What do you want to convert?`)
 
 const input = require('sync-input');
 
+// currency input & validation
 let currencies = ["JPY", "EUR", "GBP", "RUB", "USD"];
-let currencyInput = input("To:").toUpperCase();
-if (!(currencies.includes(currencyInput))) {
+let fromInput = input("From:").toUpperCase();
+if (!(currencies.includes(fromInput))) {
+    console.log("Unknown currency");
+    return;
+}
+let toInput = input("To:").toUpperCase();
+if (!(currencies.includes(toInput))) {
     console.log("Unknown currency");
     return;
 }
 
+// amount input and validation
 let amountInput = Number(input("Amount:"));
-let result;
-
 if (isNaN(amountInput)) {
     console.log("The amount has to be a number");
     return;
 } else if (amountInput < 1 ) {
     console.log("The amount can not be less than 1");
     return;
-} else if (currencyInput === "JPY") {
-    result = (amountInput * 113.5).toFixed(4);
-} else if (currencyInput === "EUR") {
-    result = (amountInput * 0.89).toFixed(4);
-} else if (currencyInput === "RUB") {
-    result = (amountInput * 74.36).toFixed(4);
-} else if (currencyInput === "GBP") {
-    result = (amountInput * 0.75).toFixed(4);
-} else if (currencyInput === "USD") {
-    result = (amountInput).toFixed(4);
 }
 
-console.log(`Result: ${amountInput} USD equals ${result} ${currencyInput}`);
+// setting currency rates
+let currencyRate = {
+    USD: 1,
+    JPY: 113.5,
+    EUR: 0.89,
+    RUB: 74.36,
+    GBP: 0.75
+};
+
+let result = (amountInput / currencyRate[fromInput] * currencyRate[toInput]).toFixed(4);
+console.log(`Result: ${amountInput} ${fromInput} equals ${result} ${toInput}`);
